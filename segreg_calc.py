@@ -181,9 +181,10 @@ class segreg:
 
     def run(self):
         """Run method that performs all the real work"""
-        # show the dialog
+		
+	    # show the dialog
         self.dlg.show()
-        # Run the dialog event loop
+		# Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:

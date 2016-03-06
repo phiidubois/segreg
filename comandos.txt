@@ -1,0 +1,6 @@
+editingStarted()
+Is emitted, when editing on this layer has started.
+editingStopped()
+Is emitted, when edited changes successfully have been written to the data provider.
+dataProvider()
+Returns the data provider

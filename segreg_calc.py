@@ -21,16 +21,18 @@
  ***************************************************************************/
 """
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt4.QtGui import QAction, QIcon
+from PyQt4.QtGui import * #QAction, QIcon
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialog
 from segreg_calc_dialog import segregDialog
 import os.path
+import DataController
 
 
 class segreg:
     """QGIS Plugin Implementation."""
+    mensagemTeste = "teste de mensagem global"
 
     def __init__(self, iface):
         """Constructor.
@@ -181,13 +183,36 @@ class segreg:
 
     def run(self):
         """Run method that performs all the real work"""
-		
-	    # show the dialog
+        layers = self.iface.legendInterface().layers()
+        DataController.printTeste()
+        self.dlg.cbLayers.clear()
+        layer_list = []
+        for layer in layers:
+            layer_list.append(layer.name())
+            print type(layer)
+        self.dlg.cbLayers.addItems(layer_list)
+        self.dlg.cbLayers.activated[str].connect(self.on_combo_activated)
+
+        # show the dialog
         self.dlg.show()
 		# Run the dialog event loop
         result = self.dlg.exec_()
+
         # See if OK was pressed
         if result:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
+
+    def on_combo_activated(self, item):
+        layers = self.iface.legendInterface().layers()
+        self.dlg.lvLayerFields.clear()
+        for layer in layers:
+            if layer.name() == item:
+                provider = layer.dataProvider()
+                for field in provider.fieldNameMap():
+                    item = QListWidgetItem(field)
+                    self.dlg.lvLayerFields.addItem(item)
+                    self.dlg.lvLayerFields.show()
+                    #lvLayerFields
+                break # quando achar a layer para o loop
